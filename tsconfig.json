@@ -16,8 +16,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "jsx": "react-jsx",
     "paths": {
       "@api/*": ["./src/api/*"],
+      "@playground/*": ["./playground/src/*"],
       "@ui/*": ["./src/ui/*"],
       "@fixtures": ["./src/fixtures/index.ts"],
       "@fixtures/*": ["./src/fixtures/*"],

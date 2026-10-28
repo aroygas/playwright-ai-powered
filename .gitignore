@@ -10,3 +10,4 @@ src/auth/storage/*
 config/env/*.local.env
 *.log
 .DS_Store
+playground/dist/

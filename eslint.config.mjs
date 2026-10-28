@@ -62,6 +62,8 @@ export default tseslint.config(
       'playwright/no-wait-for-timeout': 'error',
       'playwright/no-force-option': 'error',
       'playwright/prefer-web-first-assertions': 'error',
+      // Component/page helpers named expectX() wrap web-first assertions.
+      'playwright/expect-expect': ['warn', { assertFunctionPatterns: ['^expect', '\\.expect'] }],
     },
   },
   prettier,
