@@ -12,7 +12,9 @@ runs:
         path: blob-report
         pattern: blob-report-*
         merge-multiple: true
-    - run: npm run report:merge
+    # merge-reports exits 1 when the merged tests contain failures; that is shown in the report and
+    # gated by the test jobs, so only fail here if no report was produced.
+    - run: npm run report:merge || [ -f merged-report/results.json ]
       shell: bash
     - id: has-results
       run: echo "found=$([ -d allure-results ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
