@@ -1,0 +1,12 @@
+node_modules/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+.auth/
+src/auth/storage/*
+!src/auth/storage/.gitkeep
+.env
+config/env/*.local.env
+*.log
+.DS_Store

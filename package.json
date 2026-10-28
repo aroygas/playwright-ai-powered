@@ -1,0 +1,60 @@
+{
+  "name": "playwright-ai-powered",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-ready Playwright framework template for Web UI, API and Component testing",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
+    "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",
+    "@eslint/js": "10.0.1",
+    "@faker-js/faker": "10.6.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.5",
+    "cross-env": "10.1.0",
+    "dotenv": "18.0.9",
+    "eslint": "10.13.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-playwright": "2.12.1",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:api": "playwright test --project=api",
+    "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chrome",
+    "test:ct": "node -e \"console.log('Component tests are wired in Phase 5 (P5.1).')\"",
+    "test:env:local": "cross-env TEST_ENV=local playwright test",
+    "test:env:dev": "cross-env TEST_ENV=dev playwright test",
+    "test:env:staging": "cross-env TEST_ENV=staging playwright test",
+    "test:env:prod": "cross-env TEST_ENV=prod playwright test --grep @smoke",
+    "test:list": "playwright test --list",
+    "report:merge": "playwright merge-reports --reporter html ./blob-report",
+    "report": "playwright show-report"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
