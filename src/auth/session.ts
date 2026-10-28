@@ -9,10 +9,18 @@ import { env } from '@config/environments';
 import { getCredentials, tokenPath } from './roles';
 import type { AuthenticatedRole } from './roles';
 
-/** True when `file` exists and was written within the configured TTL. */
-export function isFresh(file: string): boolean {
+/** restful-booker wipes all tokens every ~10 minutes, so never trust a cached API token longer than this. */
+const API_TOKEN_MAX_TTL_MINUTES = 5;
+
+/** True when `file` was written within the TTL and no session cookie in it has expired (or is about to). */
+export function isFresh(file: string, ttlMinutes = env.auth.ttlMinutes): boolean {
   try {
-    return Date.now() - statSync(file).mtimeMs < env.auth.ttlMinutes * 60_000;
+    if (Date.now() - statSync(file).mtimeMs >= ttlMinutes * 60_000) return false;
+    const state = JSON.parse(readFileSync(file, 'utf8')) as { cookies?: { expires?: number }[] };
+    const cutoff = Date.now() / 1000 + 60;
+    return (state.cookies ?? []).every(
+      (c) => c.expires === undefined || c.expires < 0 || c.expires > cutoff,
+    );
   } catch {
     return false;
   }
@@ -23,9 +31,9 @@ export function ensureDirFor(file: string) {
 }
 
 /** Logs in through the API and caches the token under `.auth/` (TTL-aware). */
-export async function getApiToken(role: AuthenticatedRole): Promise<string> {
+export async function getApiToken(role: AuthenticatedRole, forceFresh = false): Promise<string> {
   const file = tokenPath(role);
-  if (isFresh(file)) {
+  if (!forceFresh && isFresh(file, Math.min(env.auth.ttlMinutes, API_TOKEN_MAX_TTL_MINUTES))) {
     try {
       const cached = expectSchema(AuthTokenSchema, JSON.parse(readFileSync(file, 'utf8')));
       return cached.token;

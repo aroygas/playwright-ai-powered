@@ -29,7 +29,11 @@ const tokenCookie = (token: string) => ({ Cookie: `token=${token}` });
 
 async function clientFor(request: APIRequestContext, role: Role): Promise<ApiClient> {
   if (!isAuthenticated(role)) return new ApiClient(request);
-  return new ApiClient(request, { token: await getApiToken(role), authHeaders: tokenCookie });
+  return new ApiClient(request, {
+    token: await getApiToken(role),
+    authHeaders: tokenCookie,
+    refreshToken: () => getApiToken(role, true),
+  });
 }
 
 export const test = base.extend<ApiFixtures>({

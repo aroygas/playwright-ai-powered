@@ -1,3 +1,4 @@
+import os from 'node:os';
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './config/environments';
 
@@ -9,8 +10,15 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  // Local: Playwright default (half of cores). CI: explicit and overridable via WORKERS.
-  workers: isCI ? Number(process.env.WORKERS ?? 2) : undefined,
+  // Each parallel worker needs its own WORKER_ACCOUNTS entry (parallel-unsafe flows), so never exceed it.
+  // Local: half of cores (Playwright default). CI: explicit and overridable via WORKERS.
+  workers: Math.max(
+    1,
+    Math.min(
+      isCI ? Number(process.env.WORKERS ?? 2) : Math.ceil(os.cpus().length / 2),
+      env.auth.workerAccounts.length || Infinity,
+    ),
+  ),
   timeout: env.timeouts.test,
   expect: { timeout: env.timeouts.expect },
   // blob reports are required for --shard + merge-reports (`npm run report:merge`).

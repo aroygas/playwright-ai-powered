@@ -19,6 +19,8 @@ export type RequestOptions = {
 
 export type ApiClientOptions = {
   token?: string;
+  /** Called once on 401/403 when a token was sent; returns a fresh token for a single retry. */
+  refreshToken?: () => Promise<string>;
   /** Builds auth headers from the token. Default: `Authorization: Bearer <token>`. */
   authHeaders?: (token: string) => Record<string, string>;
 };
@@ -49,7 +51,7 @@ function redactBody(body: unknown): unknown {
 export class ApiClient {
   constructor(
     private readonly request: APIRequestContext,
-    private readonly options: ApiClientOptions = {},
+    private options: ApiClientOptions = {},
   ) {}
 
   get<T>(path: string, opts?: RequestOptions) {
@@ -79,14 +81,17 @@ export class ApiClient {
     path: string,
     opts: RequestOptions = {},
   ): Promise<ApiResponse<T>> {
-    const headers = { Accept: 'application/json', ...this.authHeaders(), ...opts.headers };
+    let headers = { Accept: 'application/json', ...this.authHeaders(), ...opts.headers };
     const started = Date.now();
-    const raw = await this.request.fetch(path, {
-      method,
-      headers,
-      params: opts.params,
-      data: opts.data,
-    });
+    const fetchOnce = () =>
+      this.request.fetch(path, { method, headers, params: opts.params, data: opts.data });
+    let raw = await fetchOnce();
+    const { token, refreshToken } = this.options;
+    if (token && refreshToken && (raw.status() === 401 || raw.status() === 403)) {
+      this.options = { ...this.options, token: await refreshToken() };
+      headers = { Accept: 'application/json', ...this.authHeaders(), ...opts.headers };
+      raw = await fetchOnce();
+    }
     const durationMs = Date.now() - started;
     const text = await raw.text();
     let data: unknown = text === '' ? undefined : text;

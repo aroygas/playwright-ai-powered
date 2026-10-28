@@ -66,6 +66,7 @@ export const test = base.extend<AuthFixtures, AuthWorkerFixtures>({
   workerAccount: [
     async ({}, use, workerInfo) => {
       const { workerAccounts } = env.auth;
+      // One account per parallel worker, never shared (playwright.config.ts caps workers to this size).
       const account = workerAccounts[workerInfo.parallelIndex];
       if (!account) {
         throw new Error(
