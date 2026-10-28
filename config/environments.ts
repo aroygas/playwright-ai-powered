@@ -86,7 +86,9 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
     throw new Error(`Missing env file: ${envFile}`);
   }
   // Precedence (dotenv never overrides): process env > .env > config/env/<name>.env
-  const merged: NodeJS.ProcessEnv = { ...source };
+  // Empty values count as unset: CI expands missing secrets to "" and must not mask the defaults.
+  const merged: NodeJS.ProcessEnv = {};
+  for (const [k, v] of Object.entries(source)) if (v !== '') merged[k] = v;
   for (const file of [path.join(rootDir, '.env'), envFile]) {
     if (!existsSync(file)) continue;
     const parsed = dotenv.parse(readFileSync(file, 'utf8'));
