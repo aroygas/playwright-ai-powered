@@ -1,0 +1,29 @@
+name: Setup
+description: Node + npm cache + Playwright browsers cache (keyed by the pinned Playwright version)
+inputs:
+  browsers:
+    description: Space-separated browsers to install
+    default: chromium
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+    - run: npm ci
+      shell: bash
+    - id: pw
+      run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: pw-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{ inputs.browsers }}
+    - if: steps.cache.outputs.cache-hit != 'true'
+      run: npx playwright install --with-deps ${{ inputs.browsers }}
+      shell: bash
+    - if: steps.cache.outputs.cache-hit == 'true'
+      run: npx playwright install-deps ${{ inputs.browsers }}
+      shell: bash

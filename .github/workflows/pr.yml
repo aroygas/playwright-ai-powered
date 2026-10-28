@@ -1,0 +1,110 @@
+name: PR
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  TEST_ENV: ${{ vars.TEST_ENV || 'local' }}
+  # Secrets override config/env/<TEST_ENV>.env (process env wins). Unset -> committed demo defaults.
+  ADMIN_UI_USERNAME: ${{ secrets.ADMIN_UI_USERNAME }}
+  ADMIN_UI_PASSWORD: ${{ secrets.ADMIN_UI_PASSWORD }}
+  ADMIN_API_USERNAME: ${{ secrets.ADMIN_API_USERNAME }}
+  ADMIN_API_PASSWORD: ${{ secrets.ADMIN_API_PASSWORD }}
+  USER_UI_USERNAME: ${{ secrets.USER_UI_USERNAME }}
+  USER_UI_PASSWORD: ${{ secrets.USER_UI_PASSWORD }}
+  USER_API_USERNAME: ${{ secrets.USER_API_USERNAME }}
+  USER_API_PASSWORD: ${{ secrets.USER_API_PASSWORD }}
+  WORKER_ACCOUNTS: ${{ secrets.WORKER_ACCOUNTS }}
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with: { browsers: '' }
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm run test:list
+
+  component:
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-ct.zip }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run test:ct
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-ct
+          path: blob-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  api:
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-api.zip }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with: { browsers: '' }
+      - run: npm run test:api
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-api
+          path: blob-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  e2e-smoke:
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/4, 2/4, 3/4, 4/4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npx playwright test --project=chromium --grep @smoke --shard=${{ matrix.shard }}
+      - name: Name shard artifact
+        if: always()
+        id: shard
+        run: echo "name=$(echo '${{ matrix.shard }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-e2e-${{ steps.shard.outputs.name }}
+          path: blob-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  report:
+    needs: [component, api, e2e-smoke]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with: { browsers: '' }
+      - uses: ./.github/actions/report
+        with: { history-branch: '' } # PRs read no history; nightly publishes it

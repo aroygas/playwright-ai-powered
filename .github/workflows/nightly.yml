@@ -1,0 +1,117 @@
+name: Nightly regression
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_env:
+        description: Target environment
+        type: choice
+        options: [local, dev, staging, prod]
+        default: local
+      include_quarantine:
+        description: Also run @quarantine tests (reported, never blocking)
+        type: boolean
+        default: false
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push Allure history to gh-pages
+
+env:
+  CI: true
+  TEST_ENV: ${{ inputs.test_env || vars.TEST_ENV || 'local' }}
+  ADMIN_UI_USERNAME: ${{ secrets.ADMIN_UI_USERNAME }}
+  ADMIN_UI_PASSWORD: ${{ secrets.ADMIN_UI_PASSWORD }}
+  ADMIN_API_USERNAME: ${{ secrets.ADMIN_API_USERNAME }}
+  ADMIN_API_PASSWORD: ${{ secrets.ADMIN_API_PASSWORD }}
+  USER_UI_USERNAME: ${{ secrets.USER_UI_USERNAME }}
+  USER_UI_PASSWORD: ${{ secrets.USER_UI_PASSWORD }}
+  USER_API_USERNAME: ${{ secrets.USER_API_USERNAME }}
+  USER_API_PASSWORD: ${{ secrets.USER_API_PASSWORD }}
+  WORKER_ACCOUNTS: ${{ secrets.WORKER_ACCOUNTS }}
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ matrix.project }}.zip
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit, mobile-chrome]
+        shard: [1/2, 2/2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with: { browsers: 'chromium firefox webkit' }
+      - run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shard }}
+      - name: Name shard artifact
+        if: always()
+        id: shard
+        run: echo "name=${{ matrix.project }}-$(echo '${{ matrix.shard }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ steps.shard.outputs.name }}
+          path: blob-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  api-ct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run test:api
+        env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-api.zip }
+      - run: npm run test:ct
+        env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-ct.zip }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-api-ct
+          path: blob-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  quarantine:
+    if: inputs.include_quarantine == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true # informational: quarantined tests never block
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run test:quarantine
+
+  report:
+    needs: [regression, api-ct]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with: { browsers: '' }
+      - uses: ./.github/actions/report
+      - name: Publish Allure history to gh-pages
+        if: success() || failure()
+        run: |
+          [ -f allure-history/history.jsonl ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cp -r allure-history "$RUNNER_TEMP/allure-history"
+          git fetch origin gh-pages:gh-pages 2>/dev/null || git checkout --orphan gh-pages
+          git checkout gh-pages 2>/dev/null || true
+          git rm -rf --quiet . 2>/dev/null || true
+          mkdir -p allure-history && cp "$RUNNER_TEMP/allure-history/history.jsonl" allure-history/
+          git add allure-history
+          git commit -m "chore: allure history" || exit 0
+          git push origin gh-pages

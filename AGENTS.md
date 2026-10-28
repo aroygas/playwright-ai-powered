@@ -1,6 +1,6 @@
 # AGENTS.md — single source of truth for AI agents
 
-TypeScript + Playwright framework for Web UI (E2E), API and Component testing. Cursor, Windsurf, Cline, Claude and Copilot rules all point here; **edit this file, not the thin wrappers**. Roadmap: `docs/ROADMAP.md`. MCP setup: `docs/MCP.md`.
+TypeScript + Playwright framework for Web UI (E2E), API and Component testing. Cursor, Windsurf, Cline, Claude and Copilot rules all point here; **edit this file, not the thin wrappers**. Roadmap: `docs/ROADMAP.md`. MCP setup: `docs/MCP.md`. CI/Docker/Allure: `docs/CI.md`.
 
 ## Architecture map
 
@@ -30,13 +30,14 @@ Path aliases: `@api/* @ui/* @fixtures @fixtures/* @data/* @auth/* @utils/* @conf
 3. **Locators live in Component/Page Objects, not in specs.** Specs call object methods and assert on exposed locators. (CT specs may use the `mount()` result's `getByRole`/`getByTestId` directly or wrap it in a shared component.)
 4. **Fixtures-only imports.** E2E/API specs: `import { test, expect } from '@fixtures'`. CT specs: `@playwright/experimental-ct-react`.
 5. **Auth via role**, never login steps: `test.use({ role: 'user' | 'admin' | 'guest' })`.
-6. **Tags come from `TAGS`** (`@utils/tags`: `smoke`, `regression`, `api`): `{ tag: [TAGS.smoke] }`.
+6. **Tags come from `TAGS`** (`@utils/tags`: `smoke`, `regression`, `api`, `quarantine`): `{ tag: [TAGS.smoke] }`.
 7. **Data via factories & API fixtures** (`buildBooking`, `createBooking`, `cleanup.register`). Created entities must be auto-cleaned. No hardcoded URLs/credentials: use `env` / `getCredentials`.
 8. **Services return, specs assert.** No `expect` in services; components/pages only expose `expectX()` helpers (the `expectX` name is required: lint treats it as an assertion).
 9. **Page actions carry `@step()`** for readable reports.
 10. **Visual baselines are `-win32` only** (local debugging). Don't generate other-OS baselines until P8.2.
 11. **Playwright version lock:** `@playwright/test`, `playwright`, `@playwright/experimental-ct-react` stay on the same exact version (`1.62.1`). Never bump one alone.
-12. `eslint-disable` needs a justification (`// eslint-disable-next-line rule -- reason`).
+12. **Flaky test?** Tag it `TAGS.quarantine` with a tracking issue instead of retrying/skipping silently.
+13. `eslint-disable` needs a justification (`// eslint-disable-next-line rule -- reason`).
 
 ## Commands
 
@@ -47,6 +48,8 @@ Path aliases: `@api/* @ui/* @fixtures @fixtures/* @data/* @auth/* @utils/* @conf
 | `npm run test:smoke` / `test:api` / `test:e2e` / `test:ct` | Test subsets.                                                                               |
 | `npm run test:list`                                        | List tests without running (catches import/config errors).                                  |
 | `npm run test:env:<local\|dev\|staging\|prod>`             | Choose environment.                                                                         |
+| `npm run test:quarantine`                                  | Run only `@quarantine` (flaky) tests; excluded from every other run.                        |
+| `npm run docker:test` / `report:merge` / `report:allure`   | Containerized run; merge shard blobs; build Allure report.                                  |
 | `npm run playground:dev`                                   | Run the playground for live exploration.                                                    |
 
 ## Definition of Done

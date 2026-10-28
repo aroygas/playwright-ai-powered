@@ -1,6 +1,7 @@
 import os from 'node:os';
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './config/environments';
+import { allureReporter } from './config/allure';
 
 const isCI = !!process.env.CI;
 
@@ -22,7 +23,12 @@ export default defineConfig({
   timeout: env.timeouts.test,
   expect: { timeout: env.timeouts.expect },
   // blob reports are required for --shard + merge-reports (`npm run report:merge`).
-  reporter: isCI ? [['blob'], ['github'], ['list']] : [['list'], ['html', { open: 'never' }]],
+  // Quarantined (@quarantine) tests are excluded everywhere; run them via `npm run test:quarantine`.
+  grepInvert: process.env.RUN_QUARANTINE ? undefined : /@quarantine/,
+  // CI shards emit blob only; html/json/allure reports are built after merge (playwright.merge.config.ts).
+  reporter: isCI
+    ? [['blob'], ['github'], ['list']]
+    : [['list'], ['html', { open: 'never' }], [...allureReporter]],
   use: {
     baseURL: env.baseURL,
     actionTimeout: env.timeouts.action,

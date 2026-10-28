@@ -1,0 +1,29 @@
+# Usage (from repo root):
+#   docker compose -f docker/docker-compose.yml --env-file config/env/local.env run --rm tests --project=api
+# TEST_ENV and secrets come from the host environment / --env-file, never baked into the image.
+services:
+  tests:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ipc: host # recommended by Playwright for Chromium
+    init: true
+    environment:
+      - TEST_ENV=${TEST_ENV:-local}
+      - WORKERS=${WORKERS:-2}
+      - BASE_URL
+      - API_URL
+      - ADMIN_UI_USERNAME
+      - ADMIN_UI_PASSWORD
+      - ADMIN_API_USERNAME
+      - ADMIN_API_PASSWORD
+      - USER_UI_USERNAME
+      - USER_UI_PASSWORD
+      - USER_API_USERNAME
+      - USER_API_PASSWORD
+      - WORKER_ACCOUNTS
+    volumes:
+      - ../blob-report:/app/blob-report
+      - ../test-results:/app/test-results
+      - ../playwright-report:/app/playwright-report
+      - ../allure-results:/app/allure-results

@@ -1,0 +1,44 @@
+name: Report
+description: Merge sharded blob reports into HTML + JSON + Allure (with history) and upload them
+inputs:
+  history-branch:
+    description: Branch holding Allure history (gh-pages); empty disables history
+    default: gh-pages
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: blob-report
+        pattern: blob-report-*
+        merge-multiple: true
+    - run: npm run report:merge
+      shell: bash
+    - id: has-results
+      run: echo "found=$([ -d allure-results ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - name: Restore Allure history
+      if: inputs.history-branch != '' && steps.has-results.outputs.found == 'true'
+      uses: actions/checkout@v4
+      continue-on-error: true
+      with:
+        ref: ${{ inputs.history-branch }}
+        path: gh-pages-history
+    - name: Generate Allure report
+      if: steps.has-results.outputs.found == 'true'
+      run: |
+        mkdir -p allure-history
+        cp gh-pages-history/allure-history/history.jsonl allure-history/history.jsonl 2>/dev/null || true
+        npm run report:allure
+      shell: bash
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: |
+          playwright-report/
+          merged-report/
+          allure-report/
+          allure-history/
+        retention-days: 14
+        if-no-files-found: ignore
