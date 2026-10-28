@@ -9,6 +9,13 @@ Reusable TypeScript + Playwright framework for Web UI, API and Component Testing
 - Prompt template: *"Read `docs/ROADMAP.md` + `AGENTS.md`. Implement task Px.y only. Don't commit; stage changes. Run `npm run lint && npm run typecheck` (+ relevant tests) before finishing."*
 - Definition of Done: lint/typecheck green, ≥1 example test proving the feature, docs/AGENTS.md updated if a pattern changed.
 
+## Execution constraints (learned during implementation)
+- **`AGENTS.md` does not exist yet** (created in P6.1). Until then, `docs/ROADMAP.md` is the only contract: ignore the `AGENTS.md` half of the prompt template and treat this file as the source of truth.
+- **Playwright version lock:** `@playwright/test`, `playwright` and `@playwright/experimental-ct-react` are pinned to exact `1.62.1`, the newest version the CT runner publishes. Mismatched `@playwright/test` / CT runner versions break at runtime, so they must be bumped together, and only once CT publishes a newer release. Don't bump one in isolation (incl. Renovate/Dependabot). The P7.1 Docker image tag must match this pin.
+- **Visual baselines are `-win32` only:** existing `toHaveScreenshot` baselines are local-debugging artifacts, not CI-valid. The Docker-only cross-platform baseline strategy stays deferred to P8.2; don't generate Linux/macOS baselines before then.
+- **Lint — custom assertion helpers:** ESLint has an override for `playwright/expect-expect` so helper methods named `expectX()` (e.g. `expectVisible()`) count as valid assertions. New assertion helpers must follow the `expectX` naming.
+- **Auth session flakiness:** the 30-minute auth TTL (P2.2) is unreliable: saucedemo.com expires sessions sooner on its backend, so a file that looks fresh may hold a dead session. P2 must add a resilient validation loop or fallback instead of trusting TTL alone (see P2.2).
+
 ## Target layout
 ```
 config/            env/*.env, environments.ts (zod schema)
@@ -35,7 +42,7 @@ docker/  .github/workflows/  .gitlab-ci.yml
 **Goal:** Deterministic, strict TS workspace that agents can't drift from.
 **Scope:** `package.json`, `tsconfig.json` (strict, path aliases `@api/* @ui/* @fixtures/* @data/*`), ESLint flat config (`eslint-plugin-playwright`, `@typescript-eslint`), Prettier, `.editorconfig`, `.nvmrc`, `.gitignore`, Husky + lint-staged, npm scripts.
 **Tasks:**
-- P0.1 Init npm project, install `@playwright/test`, TS, browsers; pin exact versions; `.nvmrc` (24); `package.json` `"engines": { "node": ">=24.0.0", "npm": ">=11.0.0" }` + `.npmrc` `engine-strict=true` so agents in isolated envs can't install with a mismatched toolchain; commit `package-lock.json`, CI uses `npm ci`.
+- P0.1 Init npm project, install `@playwright/test`, TS, browsers; pin exact versions (Playwright packages locked to `1.62.1`, see Execution constraints); `.nvmrc` (24); `package.json` `"engines": { "node": ">=24.0.0", "npm": ">=11.0.0" }` + `.npmrc` `engine-strict=true` so agents in isolated envs can't install with a mismatched toolchain; commit `package-lock.json`, CI uses `npm ci`.
 - P0.2 `tsconfig` strict + path aliases; `typecheck` script.
 - P0.3 ESLint flat config incl. `playwright/no-wait-for-timeout`, `no-force-option`, `prefer-web-first-assertions`, plus `no-restricted-syntax` selectors banning `page.locator(...)` / `.locator('<css|xpath string>')` and `page.$`/`$$` repo-wide (specs, pages, components). Single sanctioned escape hatch: `BaseComponent` root resolution, via `// eslint-disable-next-line -- reason` that a lint rule (`eslint-comments/require-description`) forces to be justified.
 - P0.4 Prettier + Husky pre-commit (lint-staged) + commitlint (optional).
@@ -58,7 +65,7 @@ docker/  .github/workflows/  .gitlab-ci.yml
 **Scope:** `src/auth/roles.ts`, `tests/setup/auth.setup.ts`, `src/fixtures/auth.fixtures.ts`, `.auth/` (gitignored).
 **Tasks:**
 - P2.1 Role registry (`admin`, `user`, `guest`) typed enum → creds from env.
-- P2.2 `auth.setup.ts` as setup project dependency: API-first login (fallback UI), writes `.auth/<role>.json`; skip if fresh (TTL check).
+- P2.2 `auth.setup.ts` as setup project dependency: API-first login (fallback UI), writes `.auth/<role>.json`; skip if fresh (TTL check). **TTL alone is not sufficient** (SUT sessions expire earlier than the TTL): also probe the stored session against the SUT (e.g. authenticated page/endpoint check) and re-login on failure; add a fallback to force re-auth (retry once, then fail with a clear error) in the fixture so stale sessions don't surface as flaky test failures.
 - P2.3 Fixture `asRole(role)` / `test.use({ role })` that creates isolated contexts; multi-role in one test (two contexts).
 - P2.4 Worker-scoped accounts for parallel-unsafe flows (`workerInfo.parallelIndex`).
 - P2.5 API auth: token reused by `ApiClient` from same storage/state source.
@@ -80,7 +87,7 @@ docker/  .github/workflows/  .gitlab-ci.yml
 **Scope:** `src/ui/components/BaseComponent.ts`, `src/ui/components/{Header,Table,Modal,Form}.ts`, `src/ui/pages/*Page.ts`, `src/fixtures/ui.fixtures.ts`, `src/fixtures/index.ts`.
 **Tasks:**
 - P4.1 `BaseComponent(root: Locator)` — everything scoped to root; no `page.$`, no XPath.
-- P4.2 Strict locator policy: `getByRole` > `getByLabel` > `getByTestId` only; `page.locator()` and raw CSS/XPath strings are **banned** (enforced by the P0.3 `no-restricted-syntax` rule — mandatory guardrail against lazy agent output like `page.locator('div.btn > span')`); `testIdAttribute` configured; when no accessible handle exists, the fix is adding a `data-testid` to the SUT, not a CSS selector; no assertions inside components except explicit `expectVisible()`-style helpers.
+- P4.2 Strict locator policy: `getByRole` > `getByLabel` > `getByTestId` only; `page.locator()` and raw CSS/XPath strings are **banned** (enforced by the P0.3 `no-restricted-syntax` rule — mandatory guardrail against lazy agent output like `page.locator('div.btn > span')`); `testIdAttribute` configured; when no accessible handle exists, the fix is adding a `data-testid` to the SUT, not a CSS selector; no assertions inside components except explicit `expectX()`-style helpers (e.g. `expectVisible()`); ESLint `playwright/expect-expect` is overridden to recognize `expectX()` as an assertion.
 - P4.3 `BasePage` with `path`, `goto()`, `isLoaded()`; pages compose components.
 - P4.4 UI fixtures injecting page objects (`loginPage`, `inventoryPage`) lazily; `mergeTests` of ui+api+auth into single `test` export from `@fixtures`.
 - P4.5 `test.step` / `@step` decorator for readable reports; custom `expect.extend` matchers.
@@ -129,7 +136,7 @@ docker/  .github/workflows/  .gitlab-ci.yml
 **Goal:** Turn repo into a reusable template.
 **Tasks:**
 - P8.1 Quality gates: flaky detection (`--repeat-each` on changed specs), `test.fail`/quarantine policy.
-- P8.2 Visual regression baseline strategy (Docker-only snapshots).
+- P8.2 Visual regression baseline strategy (Docker-only snapshots). Replaces the current local `-win32`-only baselines; deferred until then.
 - P8.3 `npm run init:project` script to rename SUT/env/roles; GitHub template repo flag.
 - P8.4 CONTRIBUTING.md + docs site (optional); final README with quick start.
 
