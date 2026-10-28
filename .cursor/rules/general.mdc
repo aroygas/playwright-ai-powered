@@ -1,0 +1,6 @@
+---
+description: Repo-wide rules for the AI-ready Playwright framework
+alwaysApply: true
+---
+
+Follow @AGENTS.md (golden rules, commands, Definition of Done). Run `npm run ai:check` before finishing.

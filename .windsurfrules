@@ -1,0 +1,3 @@
+Follow AGENTS.md in the repo root: it is the single source of truth (architecture, golden rules, commands, Definition of Done).
+Layer-specific details: .cursor/rules/*.mdc. Few-shot prompts: .ai/prompts/. Templates: .ai/templates/.
+Before finishing any task run `npm run ai:check`.

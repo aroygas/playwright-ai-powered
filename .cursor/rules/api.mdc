@@ -1,0 +1,12 @@
+---
+description: API client, services, schemas and API specs
+globs: src/api/**,tests/api/**
+alwaysApply: false
+---
+
+Source of truth: @AGENTS.md. API layer specifics:
+
+- Services (`src/api/services`) are thin: return `ApiResponse<T>`, never assert.
+- Validate payloads with zod schemas + `expectSchema()`; specs assert status and data.
+- Use `bookingService`, `createBooking`, `cleanup` fixtures; tag with `TAGS.api`.
+- Template: `.ai/templates/service.ts.md`; prompt: `.ai/prompts/new-api-service-from-openapi.md`.

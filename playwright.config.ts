@@ -33,6 +33,14 @@ export default defineConfig({
       dependencies: ['setup'],
     },
     {
+      // Seed for Playwright Test Agents (planner/generator/healer); see specs/README.md.
+      name: 'seed',
+      testDir: './tests',
+      testMatch: /seed\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+    {
       name: 'firefox',
       testDir: './tests/e2e',
       use: { ...devices['Desktop Firefox'] },

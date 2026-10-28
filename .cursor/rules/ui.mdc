@@ -1,0 +1,13 @@
+---
+description: Component Objects, Page Objects and E2E specs
+globs: src/ui/**,tests/e2e/**,tests/seed.spec.ts
+alwaysApply: false
+---
+
+Source of truth: @AGENTS.md. UI layer specifics:
+
+- Components extend `BaseComponent(root)`; locators via `byRole` > `byLabel` > `byTestId`. No `page.locator`, CSS, XPath.
+- Pages extend `BasePage` (`path`, `goto`, `isLoaded`), compose components, actions use `@step()`.
+- Assertion helpers are named `expectX()`.
+- Specs: `import { test, expect } from '@fixtures'`, `test.use({ role })`, tags from `TAGS`.
+- Templates: `.ai/templates/{component,page,spec}.ts.md`.

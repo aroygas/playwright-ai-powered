@@ -1,0 +1,11 @@
+---
+description: Fixtures, auth and data factories
+globs: src/fixtures/**,src/auth/**,src/data/**
+alwaysApply: false
+---
+
+Source of truth: @AGENTS.md. Fixture specifics:
+
+- New fixtures go in the matching file (ui/api/auth) and are merged in `src/fixtures/index.ts`; page objects are lazy.
+- Roles come from `@auth/roles`; never hardcode credentials.
+- Created data must register cleanup (`CleanupRegistry`).
