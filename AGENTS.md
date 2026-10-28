@@ -34,7 +34,7 @@ Path aliases: `@api/* @ui/* @fixtures @fixtures/* @data/* @auth/* @utils/* @conf
 7. **Data via factories & API fixtures** (`buildBooking`, `createBooking`, `cleanup.register`). Created entities must be auto-cleaned. No hardcoded URLs/credentials: use `env` / `getCredentials`.
 8. **Services return, specs assert.** No `expect` in services; components/pages only expose `expectX()` helpers (the `expectX` name is required: lint treats it as an assertion).
 9. **Page actions carry `@step()`** for readable reports.
-10. **Visual baselines are `-win32` only** (local debugging). Don't generate other-OS baselines until P8.2.
+10. **Visual baselines:** `-win32` (local debugging) and `-linux` (CI; generate only in Docker, never on the host): `docker compose -f docker/docker-compose.yml run --rm -v "$PWD/tests/component/__snapshots__:/app/tests/component/__snapshots__" --entrypoint npx tests playwright test -c playwright-ct.config.ts --update-snapshots missing`. No macOS baselines.
 11. **Playwright version lock:** `@playwright/test`, `playwright`, `@playwright/experimental-ct-react` stay on the same exact version (`1.62.1`). Never bump one alone.
 12. **Flaky test?** Tag it `TAGS.quarantine` with a tracking issue instead of retrying/skipping silently.
 13. `eslint-disable` needs a justification (`// eslint-disable-next-line rule -- reason`).
