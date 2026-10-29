@@ -34,7 +34,7 @@ jobs:
       matrix:
         node: ['22', '24'] # engines.node floor and the .nvmrc version
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with: { browsers: '', node-version: '${{ matrix.node }}' }
       - run: npm run lint
@@ -48,7 +48,7 @@ jobs:
     timeout-minutes: 15
     env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-ct.zip }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
       - run: npm run test:ct
       - uses: actions/upload-artifact@v4
@@ -65,7 +65,7 @@ jobs:
     timeout-minutes: 15
     env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-api.zip }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with: { browsers: '' }
       - run: npm run test:api
@@ -86,7 +86,7 @@ jobs:
       matrix:
         shard: [1/4, 2/4, 3/4, 4/4]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
       - run: npx playwright test --project=chromium --grep @smoke --shard=${{ matrix.shard }}
       - name: Name shard artifact
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }
       - uses: ./.github/actions/setup
       - run: npm run test:flaky -- --only-changed=origin/${{ github.base_ref }}
@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with: { browsers: '' }
       - uses: ./.github/actions/report
