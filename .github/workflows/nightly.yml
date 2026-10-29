@@ -47,7 +47,7 @@ jobs:
         project: [chromium, firefox, webkit, mobile-chrome]
         shard: [1/2, 2/2]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         # mobile-chrome is Chromium with a Pixel 7 profile
         with:
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
       - run: npm run test:api
         env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-api.zip }
@@ -89,7 +89,7 @@ jobs:
     timeout-minutes: 30
     continue-on-error: true # informational: quarantined tests never block
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
       - run: npm run test:quarantine
 
@@ -99,13 +99,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with: { browsers: '' }
       - uses: ./.github/actions/report
       # Publish the Allure report (with history + trends) to GitHub Pages from the gh-pages branch.
       - name: Get published Allure reports
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         if: always() && hashFiles('allure-results/**') != ''
         continue-on-error: true
         with:
