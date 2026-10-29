@@ -1,5 +1,5 @@
 # Mirror of .github/workflows/{pr,nightly}.yml. Secrets: set the same names as masked CI/CD variables.
-# Image tag MUST match the pinned @playwright/test version (docs/ROADMAP.md, Playwright version lock).
+# Image tag MUST match the pinned @playwright/test version (docs/DESIGN.md, Playwright version lock).
 default:
   image: mcr.microsoft.com/playwright:v1.62.1-noble
   cache:

@@ -1,9 +1,9 @@
-# CI/CD, Docker, Allure (Phase 7)
+# CI/CD, Docker, Allure
 
 Quality gates (flaky gate, quarantine, visual baselines): see `docs/QUALITY.md`.
 
 ## Docker
-`docker/Dockerfile` uses `mcr.microsoft.com/playwright:v1.62.1-noble`. The tag **must equal** the pinned `@playwright/test` version; bump both together (see ROADMAP "Playwright version lock").
+`docker/Dockerfile` uses `mcr.microsoft.com/playwright:v1.62.1-noble`. The tag **must equal** the pinned `@playwright/test` version; bump both together (see `docs/DESIGN.md`, "Playwright version lock").
 
 ```bash
 npm run docker:build

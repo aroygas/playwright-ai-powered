@@ -1,4 +1,4 @@
-# Quality gates (Phase 8)
+# Quality gates
 
 Three rules keep the suite trustworthy: new tests must prove they are stable, known problems are labelled explicitly, and visual baselines come from one reproducible place.
 
@@ -49,4 +49,4 @@ Pixel comparisons are only meaningful when every machine renders identically, so
   It builds the image, runs `visual.spec.tsx` with `--update-snapshots` and writes the PNGs straight into the working tree via a bind mount.
 
 - Review baseline changes like code: open the PNG diff in the PR, make sure the change is intended, never commit a baseline you did not look at.
-- Bumping Playwright (always with the Docker tag, see ROADMAP "Playwright version lock") can shift rendering: run `npm run test:ct:update` in the same PR.
+- Bumping Playwright (always with the Docker tag, see `docs/DESIGN.md`, "Playwright version lock") can shift rendering: run `npm run test:ct:update` in the same PR.

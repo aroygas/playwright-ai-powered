@@ -1,4 +1,4 @@
-# Image tag MUST match the pinned @playwright/test version (see docs/ROADMAP.md, Playwright version lock).
+# Image tag MUST match the pinned @playwright/test version (see docs/DESIGN.md, Playwright version lock).
 FROM mcr.microsoft.com/playwright:v1.62.1-noble
 
 WORKDIR /app

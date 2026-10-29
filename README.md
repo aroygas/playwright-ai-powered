@@ -78,7 +78,7 @@ tests/        e2e/ · api/ · component/ · setup/ · seed.spec.ts
 playground/   React + Vite app mounted by component tests
 specs/        Markdown test plans (planner agent)
 .ai/          prompts and code templates for agents
-docs/         CI · MCP · QUALITY · ROADMAP
+docs/         CI · MCP · QUALITY · DESIGN
 ```
 
 ## AI-ready by design
@@ -105,7 +105,7 @@ This renames the package and reports, points every environment at your URLs, res
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). Design decisions: [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## License
 
