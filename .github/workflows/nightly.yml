@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write # push Allure history to gh-pages
+  contents: write # publish Allure report to gh-pages
 
 env:
   CI: true
@@ -101,17 +101,28 @@ jobs:
       - uses: ./.github/actions/setup
         with: { browsers: '' }
       - uses: ./.github/actions/report
-      - name: Publish Allure history to gh-pages
-        if: success() || failure()
-        run: |
-          [ -f allure-history/history.jsonl ] || exit 0
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          cp -r allure-history "$RUNNER_TEMP/allure-history"
-          git fetch origin gh-pages:gh-pages 2>/dev/null || git checkout --orphan gh-pages
-          git checkout gh-pages 2>/dev/null || true
-          git rm -rf --quiet . 2>/dev/null || true
-          mkdir -p allure-history && cp "$RUNNER_TEMP/allure-history/history.jsonl" allure-history/
-          git add allure-history
-          git commit -m "chore: allure history" || exit 0
-          git push origin gh-pages
+      # Publish the Allure report (with history + trends) to GitHub Pages from the gh-pages branch.
+      - name: Get published Allure reports
+        uses: actions/checkout@v4
+        if: always() && hashFiles('allure-results/**') != ''
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Build Allure site with history
+        uses: yuvalgabay/allure-v3-report-action@v1
+        if: always() && hashFiles('allure-results/**') != ''
+        with:
+          allure_results: allure-results
+          allure_report: allure-site-report
+          allure_history: allure-site
+          gh_pages: gh-pages
+          report_name: Playwright AI-powered
+          keep_reports: 20
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always() && hashFiles('allure-results/**') != ''
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-site
