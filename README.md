@@ -2,9 +2,9 @@
 
 **An AI-ready Playwright + TypeScript template for Web UI, API and Component testing.** Strict architecture, guardrails that agents can't talk their way around, and CI/reporting wired from day one.
 
-[![PR](https://github.com/aroygas/PlaywrightAIpowered/actions/workflows/pr.yml/badge.svg)](https://github.com/aroygas/PlaywrightAIpowered/actions/workflows/pr.yml)
-[![Nightly](https://github.com/aroygas/PlaywrightAIpowered/actions/workflows/nightly.yml/badge.svg)](https://github.com/aroygas/PlaywrightAIpowered/actions/workflows/nightly.yml)
-[![Allure report](https://img.shields.io/badge/Allure-live%20report-8A2BE2)](https://aroygas.github.io/PlaywrightAIpowered/)
+[![PR](https://github.com/aroygas/playwright-ai-powered/actions/workflows/pr.yml/badge.svg)](https://github.com/aroygas/playwright-ai-powered/actions/workflows/pr.yml)
+[![Nightly](https://github.com/aroygas/playwright-ai-powered/actions/workflows/nightly.yml/badge.svg)](https://github.com/aroygas/playwright-ai-powered/actions/workflows/nightly.yml)
+[![Allure report](https://img.shields.io/badge/Allure-live%20report-8A2BE2)](https://aroygas.github.io/playwright-ai-powered/)
 ![Playwright](https://img.shields.io/badge/Playwright-1.62.1-2EAD33?logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Node](https://img.shields.io/badge/Node-%E2%89%A522.22-5FA04E?logo=nodedotjs&logoColor=white)
@@ -44,8 +44,8 @@ Specs only call objects and assert. Objects only locate and act. Services only r
 ## Quick start
 
 ```bash
-git clone https://github.com/aroygas/PlaywrightAIpowered.git
-cd PlaywrightAIpowered
+git clone https://github.com/aroygas/playwright-ai-powered.git
+cd playwright-ai-powered
 npm ci
 npm run browsers:install   # all browsers (playwright install --with-deps)
 npm run test:smoke         # @smoke on every browser project + API
@@ -91,7 +91,7 @@ docs/         CI · MCP · QUALITY · DESIGN
 
 ## CI & reports
 
-PRs run lint/typecheck, component, API, a sharded E2E smoke and the flaky gate. The nightly regression covers all browsers and publishes an [Allure report](https://aroygas.github.io/PlaywrightAIpowered/) with history to GitHub Pages. Details: [`docs/CI.md`](docs/CI.md), policies: [`docs/QUALITY.md`](docs/QUALITY.md).
+PRs run lint/typecheck, component, API, a sharded E2E smoke and the flaky gate. The nightly regression covers all browsers and publishes an [Allure report](https://aroygas.github.io/playwright-ai-powered/) with history to GitHub Pages. Details: [`docs/CI.md`](docs/CI.md), policies: [`docs/QUALITY.md`](docs/QUALITY.md).
 
 ## Use as a template
 

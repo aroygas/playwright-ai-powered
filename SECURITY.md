@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report vulnerabilities privately through GitHub's [private vulnerability reporting](https://github.com/aroygas/PlaywrightAIpowered/security/advisories/new) (repository **Security** tab → **Report a vulnerability**). Do not open a public issue for security problems.
+Please report vulnerabilities privately through GitHub's [private vulnerability reporting](https://github.com/aroygas/playwright-ai-powered/security/advisories/new) (repository **Security** tab → **Report a vulnerability**). Do not open a public issue for security problems.
 
 You can expect an acknowledgement within a few days. This is a test-automation template maintained on a best-effort basis, so there is no fixed fix-time guarantee.
 
