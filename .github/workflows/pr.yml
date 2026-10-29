@@ -29,10 +29,14 @@ jobs:
   static:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24'] # engines.node floor and the .nvmrc version
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        with: { browsers: '' }
+        with: { browsers: '', node-version: '${{ matrix.node }}' }
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run format:check

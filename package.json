@@ -5,8 +5,8 @@
   "description": "AI-ready Playwright framework template for Web UI, API and Component testing",
   "type": "module",
   "engines": {
-    "node": ">=24.0.0",
-    "npm": ">=11.0.0"
+    "node": ">=22.22.1",
+    "npm": ">=10.9.0"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.4",

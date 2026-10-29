@@ -10,7 +10,7 @@ npm run browsers:install   # all browsers; a missing one fails with "Executable 
 npm run ai:check
 ```
 
-Node ≥ 24 and npm ≥ 11. Husky installs the git hooks on `npm ci`: lint-staged formats and lints staged files, commitlint checks the commit message.
+Node ≥ 22.22.1 (`.nvmrc` pins 24; CI runs static checks on 22 and 24) and npm ≥ 10.9. Husky installs the git hooks on `npm ci`: lint-staged formats and lints staged files, commitlint checks the commit message.
 
 ## Workflow
 
