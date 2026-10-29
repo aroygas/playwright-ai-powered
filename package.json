@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "AI-ready Playwright framework template for Web UI, API and Component testing",
+  "license": "MIT",
+  "author": "Alexander Roygas",
+  "repository": "github:aroygas/PlaywrightAIpowered",
   "type": "module",
   "engines": {
     "node": ">=22.22.1",
@@ -39,6 +42,9 @@
     "typescript-eslint": "8.72.1",
     "vite": "8.3.5",
     "zod": "4.6.7"
+  },
+  "overrides": {
+    "dompurify": "3.4.17"
   },
   "scripts": {
     "prepare": "husky",

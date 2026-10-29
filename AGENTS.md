@@ -1,6 +1,6 @@
 # AGENTS.md — single source of truth for AI agents
 
-TypeScript + Playwright framework for Web UI (E2E), API and Component testing. Cursor, Windsurf, Cline, Claude and Copilot rules all point here; **edit this file, not the thin wrappers**. Design decisions: `docs/DESIGN.md`. MCP setup: `docs/MCP.md`. CI/Docker/Allure: `docs/CI.md`. Quality gates: `docs/QUALITY.md`.
+TypeScript + Playwright framework for Web UI (E2E), API and Component testing. Cursor, Windsurf, Cline, Claude and Copilot rules all point here; **edit this file, not the thin wrappers**. Design decisions: `docs/DESIGN.md`. MCP setup: `docs/MCP.md`. CI/Docker/Allure: `docs/CI.md`. Quality gates: `docs/QUALITY.md`. Vulnerability reporting: `SECURITY.md`.
 
 ## Architecture map
 

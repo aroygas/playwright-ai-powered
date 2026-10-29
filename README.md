@@ -22,7 +22,7 @@
 | 🧪 **Typed API layer**   | `ApiClient` + thin services + zod contract checks + faker factories with auto-cleanup                     |
 | 🤖 **Built for agents**  | One `AGENTS.md`, glob-scoped rules, prompts, MCP servers, planner/generator/healer agents, `npm run ai:check` |
 | 🚦 **Quality gates**     | Flaky gate on changed specs, quarantine policy, Docker-rendered visual baselines                          |
-| 📊 **CI + Allure**       | Sharded GitHub Actions, GitLab mirror, Allure with history published to GitHub Pages                      |
+| 📊 **CI + Allure**       | Sharded GitHub Actions, reduced GitLab variant, Allure with history published to GitHub Pages                      |
 
 ## Architecture
 
@@ -105,7 +105,7 @@ This renames the package and reports, points every environment at your URLs, res
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). Design decisions: [`docs/DESIGN.md`](docs/DESIGN.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) (PRs use a short checklist; vulnerabilities go through [`SECURITY.md`](SECURITY.md)). Design decisions: [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## License
 
