@@ -28,4 +28,4 @@ test('reports every change through onChange', async ({ mount }) => {
 });
 ```
 
-Visual snapshots are `-win32` only; do not add baselines for other OSes.
+Visual baselines are generated in Docker only (`npm run test:ct:update`); wrap visual specs in the Linux-only `test.skip` used in `tests/component/visual.spec.tsx`.

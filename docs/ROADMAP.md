@@ -12,7 +12,7 @@ Reusable TypeScript + Playwright framework for Web UI, API and Component Testing
 ## Execution constraints (learned during implementation)
 - **`AGENTS.md` does not exist yet** (created in P6.1). Until then, `docs/ROADMAP.md` is the only contract: ignore the `AGENTS.md` half of the prompt template and treat this file as the source of truth.
 - **Playwright version lock:** `@playwright/test`, `playwright` and `@playwright/experimental-ct-react` are pinned to exact `1.62.1`, the newest version the CT runner publishes. Mismatched `@playwright/test` / CT runner versions break at runtime, so they must be bumped together, and only once CT publishes a newer release. Don't bump one in isolation (incl. Renovate/Dependabot). The P7.1 Docker image tag must match this pin.
-- **Visual baselines:** `-win32` baselines are local-debugging artifacts; `-linux` baselines (CI-valid) are generated only inside the P7.1 Docker image (see AGENTS.md rule 10). No macOS baselines. The full strategy (update workflow, review) remains P8.2.
+- **Visual baselines:** platform-neutral baselines rendered only in the P7.1 Docker image (`npm run test:ct:update`); visual specs skip on non-Linux hosts. Strategy: `docs/QUALITY.md` (P8.2, done).
 - **Lint — custom assertion helpers:** ESLint has an override for `playwright/expect-expect` so helper methods named `expectX()` (e.g. `expectVisible()`) count as valid assertions. New assertion helpers must follow the `expectX` naming.
 - **Auth session flakiness:** the 30-minute auth TTL (P2.2) is unreliable: saucedemo.com expires sessions sooner on its backend, so a file that looks fresh may hold a dead session. P2 must add a resilient validation loop or fallback instead of trusting TTL alone (see P2.2).
 
@@ -132,12 +132,12 @@ docker/  .github/workflows/  .gitlab-ci.yml
 - P7.6 Secrets handling (GH secrets → env), caching of npm/browsers, flaky test quarantine via `@quarantine` tag.
 **AI/MCP readiness:** Structured artifacts (JSON reporter, traces, Allure) give healer agents machine-readable failure context; CI = the same `ai:check` gate agents run locally.
 
-## Phase 8 — Hardening & Template Release
+## Phase 8 — Hardening & Template Release (done)
 **Goal:** Turn repo into a reusable template.
 **Tasks:**
 - P8.1 Quality gates: flaky detection (`--repeat-each` on changed specs), `test.fail`/quarantine policy.
-- P8.2 Visual regression baseline strategy (Docker-only snapshots). Replaces the current local `-win32`-only baselines; deferred until then.
-- P8.3 `npm run init:project` script to rename SUT/env/roles; GitHub template repo flag.
+- P8.2 Visual regression baseline strategy (Docker-only snapshots). Replaced the local `-win32` baselines.
+- P8.3 `npm run init:project` script to rename package/SUT URLs/credentials (roles stay a documented manual step); GitHub template repo flag is a repo setting.
 - P8.4 CONTRIBUTING.md + docs site (optional); final README with quick start.
 
 ## Recommended execution order

@@ -3,8 +3,15 @@ import { Counter } from '@playground/components/Counter';
 import { PriceTable } from '@playground/components/PriceTable';
 import type { HooksConfig } from '@playground/providers';
 
-// Screenshot the component's own element (the mount root wrapper has no box). Baselines are platform-specific (`-win32`/`-linux` suffix). Docker-only baselines: roadmap P8.2.
+// Screenshot the component's own element (the mount root wrapper has no box). Baselines are Linux-only and
+// generated in Docker (`npm run test:ct:update`), so these specs are skipped on other OSes. See docs/QUALITY.md.
 test.describe('visual snapshots', () => {
+  // eslint-disable-next-line playwright/no-skipped-test -- baselines exist for Linux only; documented in docs/QUALITY.md
+  test.skip(
+    process.platform !== 'linux' && !process.env.FORCE_VISUAL,
+    'Visual baselines are Linux-only (Docker/CI); set FORCE_VISUAL=1 to compare anyway',
+  );
+
   test('Counter, light theme', async ({ mount }) => {
     const component = await mount(<Counter label="Seats" initial={5} />);
 

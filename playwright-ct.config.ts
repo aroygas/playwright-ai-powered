@@ -8,6 +8,9 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   testDir: './tests/component',
   snapshotDir: './tests/component/__snapshots__',
+  // One platform-neutral baseline per snapshot: they are rendered in the Linux Docker image only (see docs/QUALITY.md).
+  snapshotPathTemplate:
+    '{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{arg}{-projectName}{ext}',
   outputDir: 'test-results/ct',
   fullyParallel: true,
   forbidOnly: isCI,

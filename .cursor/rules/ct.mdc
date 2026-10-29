@@ -9,5 +9,5 @@ Source of truth: @AGENTS.md. Component-testing specifics:
 - Specs import `test, expect` from `@playwright/experimental-ct-react` and components from `@playground/*`.
 - Mock network with `router.route` / `router.use(http...)` (MSW); providers via `hooksConfig`.
 - Reuse `@ui/components` objects around the mounted root. Add `data-test` to playground components instead of CSS selectors.
-- Visual snapshots are `-win32` only; run `npm run test:ct`.
+- Visual baselines are Linux/Docker-only (specs skip elsewhere); refresh with `npm run test:ct:update`, never on the host.
 - Template: `.ai/templates/ct-spec.tsx.md`.

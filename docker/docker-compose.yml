@@ -27,3 +27,11 @@ services:
       - ../test-results:/app/test-results
       - ../playwright-report:/app/playwright-report
       - ../allure-results:/app/allure-results
+
+  # Regenerates the visual baselines (the only sanctioned way): `npm run test:ct:update`.
+  ct-update:
+    extends: tests
+    entrypoint: ['npx', 'playwright', 'test', '-c', 'playwright-ct.config.ts', '--update-snapshots']
+    command: ['visual']
+    volumes:
+      - ../tests/component/__snapshots__:/app/tests/component/__snapshots__

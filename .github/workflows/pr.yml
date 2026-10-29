@@ -97,6 +97,19 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  # Re-runs the specs touched by the PR x5 without retries (see docs/QUALITY.md).
+  flaky-gate:
+    if: github.event_name == 'pull_request'
+    needs: static
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/setup
+      - run: npm run test:flaky -- --only-changed=origin/${{ github.base_ref }}
+      - run: npm run test:flaky:ct -- --only-changed=origin/${{ github.base_ref }}
+
   report:
     needs: [component, api, e2e-smoke]
     if: always()

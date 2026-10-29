@@ -1,5 +1,7 @@
 # CI/CD, Docker, Allure (Phase 7)
 
+Quality gates (flaky gate, quarantine, visual baselines): see `docs/QUALITY.md`.
+
 ## Docker
 `docker/Dockerfile` uses `mcr.microsoft.com/playwright:v1.62.1-noble`. The tag **must equal** the pinned `@playwright/test` version; bump both together (see ROADMAP "Playwright version lock").
 
@@ -12,7 +14,7 @@ Env comes from `--env-file`/host environment (never baked into the image). Repor
 ## Pipelines
 | File | Trigger | What |
 | --- | --- | --- |
-| `.github/workflows/pr.yml` | PR | lint/typecheck/format/list → CT ∥ API ∥ E2E smoke (chromium, shard 1/4..4/4) → merge blobs → artifact |
+| `.github/workflows/pr.yml` | PR | lint/typecheck/format/list → CT ∥ API ∥ E2E smoke (chromium, shard 1/4..4/4) ∥ flaky gate (changed specs ×5) → merge blobs → artifact |
 | `.github/workflows/nightly.yml` | cron 02:00 UTC, `workflow_dispatch` (`test_env`, `include_quarantine`) | all browsers × 2 shards + API + CT → merged HTML/JSON/Allure, history pushed to `gh-pages` |
 | `.gitlab-ci.yml` | MR, schedule, default branch | mirror using `parallel: 4` / `matrix`, Allure artifacts, history via cache |
 
