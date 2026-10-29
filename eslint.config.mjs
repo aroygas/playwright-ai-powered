@@ -19,6 +19,7 @@ export default tseslint.config(
       'allure-history/**',
       'merged-report/**',
       'playwright/.cache/**',
+      'playground/dist/**',
       '.auth/**',
       'src/auth/storage/**',
     ],

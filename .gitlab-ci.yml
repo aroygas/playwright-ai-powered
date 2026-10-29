@@ -97,7 +97,9 @@ report:
     - key: allure-history # history across runs
       paths: [allure-history/]
   script:
-    - npm run report:merge
+    # allure-playwright 3.14 throws in onConfigure under merge-reports (no projects yet), so the merge
+    # exits 1 even when all tests passed; the reports are still written. Fail only if none were.
+    - npm run report:merge || [ -f merged-report/results.json ]
     - mkdir -p allure-history
     - npm run report:allure
   artifacts:

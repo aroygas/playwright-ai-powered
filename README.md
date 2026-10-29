@@ -47,17 +47,18 @@ Specs only call objects and assert. Objects only locate and act. Services only r
 git clone https://github.com/aroygas/PlaywrightAIpowered.git
 cd PlaywrightAIpowered
 npm ci
-npx playwright install chromium
-npm run test:smoke      # E2E + API smoke
+npm run browsers:install   # all browsers (playwright install --with-deps)
+npm run test:smoke         # @smoke on every browser project + API
 npm run test:ct         # component tests
 ```
 
-Requires Node ≥ 24 and npm ≥ 11 (see `.nvmrc`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`).
+Requires Node ≥ 24 and npm ≥ 11 (see `.nvmrc`). If a run fails with "Executable doesn't exist", a browser is missing: run `npm run browsers:install` (on Linux it may need `sudo`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`).
 
 ## Commands
 
 | Command                                              | What                                                      |
 | ---------------------------------------------------- | --------------------------------------------------------- |
+| `npm run browsers:install`                           | Install all Playwright browsers and system deps           |
 | `npm run ai:check`                                   | Lint + typecheck + list + smoke: the gate before any change |
 | `npm test` / `test:smoke` / `test:api` / `test:e2e`  | Everything / smoke / API only / all browsers              |
 | `npm run test:ct`                                    | Component tests                                           |

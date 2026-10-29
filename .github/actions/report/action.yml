@@ -12,8 +12,9 @@ runs:
         path: blob-report
         pattern: blob-report-*
         merge-multiple: true
-    # merge-reports exits 1 when the merged tests contain failures; that is shown in the report and
-    # gated by the test jobs, so only fail here if no report was produced.
+    # merge-reports also exits 1 when allure-playwright 3.14 throws in onConfigure (it reads
+    # config.projects[0], which is empty during merge) or when merged tests failed (gated by the test
+    # jobs). The reports are still written, so only fail here if none was produced.
     - run: npm run report:merge || [ -f merged-report/results.json ]
       shell: bash
     - id: has-results

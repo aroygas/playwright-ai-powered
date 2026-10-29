@@ -6,7 +6,7 @@ Thanks for helping out! This repo is a template, so consistency matters more tha
 
 ```bash
 npm ci
-npx playwright install chromium
+npm run browsers:install   # all browsers; a missing one fails with "Executable doesn't exist"
 npm run ai:check
 ```
 

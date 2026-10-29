@@ -42,6 +42,7 @@
   },
   "scripts": {
     "prepare": "husky",
+    "browsers:install": "playwright install --with-deps",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
