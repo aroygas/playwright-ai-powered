@@ -112,7 +112,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
       - name: Build Allure site with history
-        uses: yuvalgabay/allure-v3-report-action@v1
+        uses: GuitaristForEver/allure-v3-report-action@15d4b8f28ba0ccb2f3d6e8a392a6d568aa9272f2 # v1.1.0
         if: always() && hashFiles('allure-results/**') != ''
         with:
           allure_results: allure-results
