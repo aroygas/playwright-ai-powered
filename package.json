@@ -5,7 +5,7 @@
   "description": "AI-ready Playwright framework template for Web UI, API and Component testing",
   "license": "MIT",
   "author": "Alexander Roygas",
-  "repository": "github:aroygas/PlaywrightAIpowered",
+  "repository": "github:aroygas/playwright-ai-powered",
   "type": "module",
   "engines": {
     "node": ">=22.22.1",

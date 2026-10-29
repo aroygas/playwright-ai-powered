@@ -116,11 +116,11 @@ edit('.github/workflows/nightly.yml', (text) =>
 edit('README.md', (text) => text.replace(/^# .*/m, `# ${title}`));
 if (repo) {
   const [owner, repoName] = repo.split('/');
-  for (const doc of ['README.md', 'CONTRIBUTING.md']) {
+  for (const doc of ['README.md', 'CONTRIBUTING.md', 'SECURITY.md']) {
     edit(doc, (text) =>
       text
-        .replaceAll('aroygas.github.io/PlaywrightAIpowered', `${owner}.github.io/${repoName}`)
-        .replaceAll('aroygas/PlaywrightAIpowered', repo),
+        .replaceAll('aroygas.github.io/playwright-ai-powered', `${owner}.github.io/${repoName}`)
+        .replaceAll('aroygas/playwright-ai-powered', repo),
     );
   }
 }
