@@ -10,12 +10,20 @@ updates:
         patterns:
           - '@playwright/test'
           - '@playwright/experimental-ct-react'
+      # typescript-eslint pins a typescript peer range: bump both in one PR.
+      typescript:
+        patterns:
+          - 'typescript'
+          - 'typescript-eslint'
     ignore:
       # Minor/major Playwright bumps also need the Docker image tag and a baseline refresh: do them by hand.
       - dependency-name: '@playwright/test'
         update-types: ['version-update:semver-minor', 'version-update:semver-major']
       - dependency-name: '@playwright/experimental-ct-react'
         update-types: ['version-update:semver-minor', 'version-update:semver-major']
+      # TypeScript 7 breaks `npm ci`: typescript-eslint 8.x needs typescript <6.1. Lift once it supports 7.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
