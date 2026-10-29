@@ -49,7 +49,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        with: { browsers: 'chromium firefox webkit' }
+        # mobile-chrome is Chromium with a Pixel 7 profile
+        with:
+          { browsers: "${{ matrix.project == 'mobile-chrome' && 'chromium' || matrix.project }}" }
       - run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shard }}
       - name: Name shard artifact
         if: always()

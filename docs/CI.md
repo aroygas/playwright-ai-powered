@@ -1,9 +1,9 @@
-# CI/CD, Docker, Allure (Phase 7)
+# CI/CD, Docker, Allure
 
 Quality gates (flaky gate, quarantine, visual baselines): see `docs/QUALITY.md`.
 
 ## Docker
-`docker/Dockerfile` uses `mcr.microsoft.com/playwright:v1.62.1-noble`. The tag **must equal** the pinned `@playwright/test` version; bump both together (see ROADMAP "Playwright version lock").
+`docker/Dockerfile` uses `mcr.microsoft.com/playwright:v1.62.1-noble`. The tag **must equal** the pinned `@playwright/test` version; bump both together (see `docs/DESIGN.md`, "Playwright version lock").
 
 ```bash
 npm run docker:build
@@ -16,7 +16,7 @@ Env comes from `--env-file`/host environment (never baked into the image). Repor
 | --- | --- | --- |
 | `.github/workflows/pr.yml` | PR | lint/typecheck/format/list → CT ∥ API ∥ E2E smoke (chromium, shard 1/4..4/4) ∥ flaky gate (changed specs ×5) → merge blobs → artifact |
 | `.github/workflows/nightly.yml` | cron 02:00 UTC, `workflow_dispatch` (`test_env`, `include_quarantine`) | all browsers × 2 shards + API + CT → merged HTML/JSON/Allure, history pushed to `gh-pages` |
-| `.gitlab-ci.yml` | MR, schedule, default branch | mirror using `parallel: 4` / `matrix`, Allure artifacts, history via cache |
+| `.gitlab-ci.yml` | MR, schedule, default branch | reduced variant: `parallel: 4` / `matrix`, Allure artifacts, history via cache. **Lacks** the GitHub flaky gate, the quarantine job and nightly sharding (one job per browser project) |
 
 Shards write `blob` reports (unique names via `PLAYWRIGHT_BLOB_OUTPUT_NAME`); `npm run report:merge` uses `playwright.merge.config.ts` to produce `playwright-report/` (HTML), `merged-report/results.json` (machine-readable, for healer agents) and `allure-results/`.
 

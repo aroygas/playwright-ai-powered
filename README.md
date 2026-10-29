@@ -7,7 +7,7 @@
 [![Allure report](https://img.shields.io/badge/Allure-live%20report-8A2BE2)](https://aroygas.github.io/PlaywrightAIpowered/)
 ![Playwright](https://img.shields.io/badge/Playwright-1.62.1-2EAD33?logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
-![Node](https://img.shields.io/badge/Node-%E2%89%A524-5FA04E?logo=nodedotjs&logoColor=white)
+![Node](https://img.shields.io/badge/Node-%E2%89%A522.22-5FA04E?logo=nodedotjs&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > Demo targets: [saucedemo.com](https://www.saucedemo.com) (web) and [restful-booker](https://restful-booker.herokuapp.com) (API). Swap them for your own with one command, see [Use as a template](#use-as-a-template).
@@ -22,7 +22,7 @@
 | 🧪 **Typed API layer**   | `ApiClient` + thin services + zod contract checks + faker factories with auto-cleanup                     |
 | 🤖 **Built for agents**  | One `AGENTS.md`, glob-scoped rules, prompts, MCP servers, planner/generator/healer agents, `npm run ai:check` |
 | 🚦 **Quality gates**     | Flaky gate on changed specs, quarantine policy, Docker-rendered visual baselines                          |
-| 📊 **CI + Allure**       | Sharded GitHub Actions, GitLab mirror, Allure with history published to GitHub Pages                      |
+| 📊 **CI + Allure**       | Sharded GitHub Actions, reduced GitLab variant, Allure with history published to GitHub Pages                      |
 
 ## Architecture
 
@@ -47,17 +47,18 @@ Specs only call objects and assert. Objects only locate and act. Services only r
 git clone https://github.com/aroygas/PlaywrightAIpowered.git
 cd PlaywrightAIpowered
 npm ci
-npx playwright install chromium
-npm run test:smoke      # E2E + API smoke
+npm run browsers:install   # all browsers (playwright install --with-deps)
+npm run test:smoke         # @smoke on every browser project + API
 npm run test:ct         # component tests
 ```
 
-Requires Node ≥ 24 and npm ≥ 11 (see `.nvmrc`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`).
+Requires Node ≥ 22.22.1 and npm ≥ 10.9 (`.nvmrc` pins 24, the version CI uses for tests). If a run fails with "Executable doesn't exist", a browser is missing: run `npm run browsers:install` (on Linux it may need `sudo`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`). The `github` MCP server in `.mcp.json` needs a read-only `GITHUB_MCP_TOKEN` in your environment, otherwise it fails to connect (see [`docs/MCP.md`](docs/MCP.md)).
 
 ## Commands
 
 | Command                                              | What                                                      |
 | ---------------------------------------------------- | --------------------------------------------------------- |
+| `npm run browsers:install`                           | Install all Playwright browsers and system deps           |
 | `npm run ai:check`                                   | Lint + typecheck + list + smoke: the gate before any change |
 | `npm test` / `test:smoke` / `test:api` / `test:e2e`  | Everything / smoke / API only / all browsers              |
 | `npm run test:ct`                                    | Component tests                                           |
@@ -77,7 +78,7 @@ tests/        e2e/ · api/ · component/ · setup/ · seed.spec.ts
 playground/   React + Vite app mounted by component tests
 specs/        Markdown test plans (planner agent)
 .ai/          prompts and code templates for agents
-docs/         CI · MCP · QUALITY · ROADMAP
+docs/         CI · MCP · QUALITY · DESIGN
 ```
 
 ## AI-ready by design
@@ -104,7 +105,7 @@ This renames the package and reports, points every environment at your URLs, res
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) (PRs use a short checklist; vulnerabilities go through [`SECURITY.md`](SECURITY.md)). Design decisions: [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## License
 

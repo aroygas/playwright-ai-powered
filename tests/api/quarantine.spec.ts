@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@fixtures';
 import { TAGS } from '@utils/tags';
 
 // Pattern for quarantining a flaky test: add TAGS.quarantine and link the tracking issue.

@@ -1,5 +1,6 @@
-# Mirror of .github/workflows/{pr,nightly}.yml. Secrets: set the same names as masked CI/CD variables.
-# Image tag MUST match the pinned @playwright/test version (docs/ROADMAP.md, Playwright version lock).
+# Reduced GitLab variant of .github/workflows/{pr,nightly}.yml: no flaky gate, no quarantine job and no
+# nightly sharding (see docs/CI.md). Secrets: set the same names as masked CI/CD variables.
+# Image tag MUST match the pinned @playwright/test version (docs/DESIGN.md, Playwright version lock).
 default:
   image: mcr.microsoft.com/playwright:v1.62.1-noble
   cache:
@@ -97,7 +98,9 @@ report:
     - key: allure-history # history across runs
       paths: [allure-history/]
   script:
-    - npm run report:merge
+    # allure-playwright 3.14 throws in onConfigure under merge-reports (no projects yet), so the merge
+    # exits 1 even when all tests passed; the reports are still written. Fail only if none were.
+    - npm run report:merge || [ -f merged-report/results.json ]
     - mkdir -p allure-history
     - npm run report:allure
   artifacts:

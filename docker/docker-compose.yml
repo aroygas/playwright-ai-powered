@@ -31,7 +31,8 @@ services:
   # Regenerates the visual baselines (the only sanctioned way): `npm run test:ct:update`.
   ct-update:
     extends: tests
-    entrypoint: ['npx', 'playwright', 'test', '-c', 'playwright-ct.config.ts', '--update-snapshots']
-    command: ['visual']
+    # `visual` must come before the flag: `--update-snapshots` takes an optional mode argument.
+    entrypoint: ['npx', 'playwright', 'test', '-c', 'playwright-ct.config.ts', 'visual']
+    command: ['--update-snapshots']
     volumes:
       - ../tests/component/__snapshots__:/app/tests/component/__snapshots__

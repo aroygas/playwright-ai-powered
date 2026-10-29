@@ -1,3 +1,3 @@
 # src/utils
 
-Cross-cutting helpers: logger, waits (web-first only, no sleeps), step decorator, `tags.ts` (closed tag vocabulary: @smoke, @regression, @api).
+Cross-cutting helpers: `step.ts` (the `@step()` decorator for readable reports) and `tags.ts` (closed tag vocabulary: `@smoke`, `@regression`, `@api`, `@quarantine`).

@@ -13,8 +13,8 @@ const USAGE = `Usage: npm run init:project -- --name <kebab-name> --base-url <ur
   --base-url <url>      Web UI under test, written to every config/env/*.env (required)
   --api-url <url>       API under test (default: keep the current value)
   --title "<Title>"     Human name for reports/README (default: derived from --name)
-  --repo <owner/name>   GitHub repo, rewrites README/CONTRIBUTING badge and Pages links
-  --author "<Name>"     Copyright holder in LICENSE
+  --repo <owner/name>   GitHub repo, rewrites README/CONTRIBUTING badge and Pages links and package.json repository
+  --author "<Name>"     Copyright holder in LICENSE and package.json author
   --keep-credentials    Keep the demo-SUT credentials instead of resetting them to placeholders
   --dry-run             Show what would change, write nothing
   --root <dir>          Project root (default: repo root)
@@ -90,10 +90,16 @@ const editJson = (relative, mutate) =>
     return `${JSON.stringify(json, null, 2)}\n`;
   });
 
+// Plain scalar when safe (what Prettier keeps), otherwise single-quoted.
+const yamlScalar = (value) =>
+  /^[A-Za-z0-9][\w .-]*$/.test(value) ? value : `'${value.replaceAll("'", "''")}'`;
+
 editJson('package.json', (pkg) => {
   pkg.name = name;
   pkg.description = `${title}: AI-ready Playwright test automation`;
   pkg.version = '0.1.0';
+  if (values.repo) pkg.repository = `github:${values.repo}`;
+  if (values.author) pkg.author = values.author;
 });
 editJson('package-lock.json', (lock) => {
   lock.name = name;
@@ -104,7 +110,7 @@ edit('allurerc.mjs', (text) =>
   text.replace(/(name|reportName): '[^']*'/g, (_, key) => `${key}: '${title}'`),
 );
 edit('.github/workflows/nightly.yml', (text) =>
-  text.replace(/report_name: .*/, `report_name: ${JSON.stringify(title)}`),
+  text.replace(/report_name: .*/, `report_name: ${yamlScalar(title)}`),
 );
 
 edit('README.md', (text) => text.replace(/^# .*/m, `# ${title}`));

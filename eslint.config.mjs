@@ -5,7 +5,7 @@ import eslintComments from '@eslint-community/eslint-plugin-eslint-comments/conf
 import prettier from 'eslint-config-prettier';
 
 const LOCATOR_POLICY =
-  'Use getByRole > getByLabel > getByTestId. If no accessible handle exists, add a data-testid to the SUT.';
+  'Use getByRole > getByLabel > getByTestId. If no accessible handle exists, add a data-test attribute to the SUT.';
 
 export default tseslint.config(
   {
@@ -19,8 +19,8 @@ export default tseslint.config(
       'allure-history/**',
       'merged-report/**',
       'playwright/.cache/**',
+      'playground/dist/**',
       '.auth/**',
-      'src/auth/storage/**',
     ],
   },
   js.configs.recommended,
@@ -68,6 +68,23 @@ export default tseslint.config(
       'playwright/prefer-web-first-assertions': 'error',
       // Component/page helpers named expectX() wrap web-first assertions.
       'playwright/expect-expect': ['warn', { assertFunctionPatterns: ['^expect', '\\.expect'] }],
+    },
+  },
+  {
+    // Rule 4: E2E/API specs get `test`/`expect` from the merged fixtures, never from Playwright directly.
+    files: ['tests/e2e/**/*.ts', 'tests/api/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@playwright/test',
+              message: "Import { test, expect } from '@fixtures' in E2E/API specs.",
+            },
+          ],
+        },
+      ],
     },
   },
   prettier,

@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Golden rule 11 (docs/DESIGN.md): these packages move together, on one exact version.
+      playwright:
+        patterns:
+          - '@playwright/test'
+          - '@playwright/experimental-ct-react'
+    ignore:
+      # Minor/major Playwright bumps also need the Docker image tag and a baseline refresh: do them by hand.
+      - dependency-name: '@playwright/test'
+        update-types: ['version-update:semver-minor', 'version-update:semver-major']
+      - dependency-name: '@playwright/experimental-ct-react'
+        update-types: ['version-update:semver-minor', 'version-update:semver-major']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

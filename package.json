@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "description": "AI-ready Playwright framework template for Web UI, API and Component testing",
+  "license": "MIT",
+  "author": "Alexander Roygas",
+  "repository": "github:aroygas/PlaywrightAIpowered",
   "type": "module",
   "engines": {
-    "node": ">=24.0.0",
-    "npm": ">=11.0.0"
+    "node": ">=22.22.1",
+    "npm": ">=10.9.0"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.4",
@@ -40,8 +43,12 @@
     "vite": "8.3.5",
     "zod": "4.6.7"
   },
+  "overrides": {
+    "dompurify": "3.4.17"
+  },
   "scripts": {
     "prepare": "husky",
+    "browsers:install": "playwright install --with-deps",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
@@ -63,7 +70,7 @@
     "test:ct:update": "docker compose -f docker/docker-compose.yml run --rm --build ct-update",
     "playground:dev": "vite playground",
     "playground:build": "vite build playground",
-    "report:allure": "allure generate ./allure-results --config allurerc.mjs",
+    "report:allure": "allure generate ./allure-results --config allurerc.mjs --clean",
     "report:allure:open": "allure open ./allure-report",
     "test:flaky": "playwright test --only-changed=origin/main --repeat-each=5 --retries=0 --pass-with-no-tests --project=chromium --project=api",
     "test:flaky:ct": "playwright test -c playwright-ct.config.ts --only-changed=origin/main --repeat-each=5 --retries=0 --pass-with-no-tests",
