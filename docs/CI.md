@@ -15,7 +15,7 @@ Env comes from `--env-file`/host environment (never baked into the image). Repor
 | File | Trigger | What |
 | --- | --- | --- |
 | `.github/workflows/pr.yml` | PR | lint/typecheck/format/list → CT ∥ API ∥ E2E smoke (chromium, shard 1/4..4/4) ∥ flaky gate (changed specs ×5) → merge blobs → artifact |
-| `.github/workflows/nightly.yml` | cron 02:00 UTC, `workflow_dispatch` (`test_env`, `include_quarantine`) | all browsers × 2 shards + API + CT → merged HTML/JSON/Allure, history pushed to `gh-pages` |
+| `.github/workflows/nightly.yml` | cron 02:00 UTC, `workflow_dispatch` (`test_env`, `include_quarantine`) | all browsers × 2 shards + API + CT → merged HTML/JSON/Allure; Allure report + `allure-history/history.jsonl` published to `gh-pages` (GitHub Pages source: `gh-pages` / root) |
 | `.gitlab-ci.yml` | MR, schedule, default branch | reduced variant: `parallel: 4` / `matrix`, Allure artifacts, history via cache. **Lacks** the GitHub flaky gate, the quarantine job and nightly sharding (one job per browser project) |
 
 Shards write `blob` reports (unique names via `PLAYWRIGHT_BLOB_OUTPUT_NAME`); `npm run report:merge` uses `playwright.merge.config.ts` to produce `playwright-report/` (HTML), `merged-report/results.json` (machine-readable, for healer agents) and `allure-results/`.

@@ -49,9 +49,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
-        # mobile-chrome is Chromium with a Pixel 7 profile
+        # Every project depends on the `setup` project, which runs in Chromium, so Chromium is always
+        # installed. mobile-chrome is Chromium with a Pixel 7 profile.
         with:
-          { browsers: "${{ matrix.project == 'mobile-chrome' && 'chromium' || matrix.project }}" }
+          browsers: '${{ contains(fromJSON(''["chromium","mobile-chrome"]''), matrix.project) && ''chromium'' || format(''chromium {0}'', matrix.project) }}'
       - run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shard }}
       - name: Name shard artifact
         if: always()
@@ -103,27 +104,17 @@ jobs:
       - uses: ./.github/actions/setup
         with: { browsers: '' }
       - uses: ./.github/actions/report
-      # Publish the Allure report (with history + trends) to GitHub Pages from the gh-pages branch.
-      - name: Get published Allure reports
-        uses: actions/checkout@v7
-        if: always() && hashFiles('allure-results/**') != ''
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-      - name: Build Allure site with history
-        uses: GuitaristForEver/allure-v3-report-action@15d4b8f28ba0ccb2f3d6e8a392a6d568aa9272f2 # v1.1.0
-        if: always() && hashFiles('allure-results/**') != ''
-        with:
-          allure_results: allure-results
-          allure_report: allure-site-report
-          allure_history: allure-site
-          gh_pages: gh-pages
-          report_name: Playwright AI-powered
-          keep_reports: 20
+      # Publish the Allure report built above to GitHub Pages (gh-pages branch). The report action
+      # restores allure-history/history.jsonl from gh-pages before generating, so trends carry over.
+      - name: Assemble Allure site
+        if: always() && hashFiles('allure-report/index.html') != ''
+        run: |
+          mkdir -p allure-site/allure-history
+          cp -r allure-report/. allure-site/
+          cp allure-history/history.jsonl allure-site/allure-history/ 2>/dev/null || true
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: always() && hashFiles('allure-results/**') != ''
+        if: always() && hashFiles('allure-site/index.html') != ''
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
