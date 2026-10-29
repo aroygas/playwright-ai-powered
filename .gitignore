@@ -4,9 +4,8 @@ test-results/
 blob-report/
 playwright/.cache/
 .auth/
-src/auth/storage/*
-!src/auth/storage/.gitkeep
 .env
+.claude/settings.local.json
 config/env/*.local.env
 *.log
 .DS_Store

@@ -64,7 +64,7 @@
     "test:ct:update": "docker compose -f docker/docker-compose.yml run --rm --build ct-update",
     "playground:dev": "vite playground",
     "playground:build": "vite build playground",
-    "report:allure": "allure generate ./allure-results --config allurerc.mjs",
+    "report:allure": "allure generate ./allure-results --config allurerc.mjs --clean",
     "report:allure:open": "allure open ./allure-report",
     "test:flaky": "playwright test --only-changed=origin/main --repeat-each=5 --retries=0 --pass-with-no-tests --project=chromium --project=api",
     "test:flaky:ct": "playwright test -c playwright-ct.config.ts --only-changed=origin/main --repeat-each=5 --retries=0 --pass-with-no-tests",

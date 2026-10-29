@@ -90,6 +90,10 @@ const editJson = (relative, mutate) =>
     return `${JSON.stringify(json, null, 2)}\n`;
   });
 
+// Plain scalar when safe (what Prettier keeps), otherwise single-quoted.
+const yamlScalar = (value) =>
+  /^[A-Za-z0-9][\w .-]*$/.test(value) ? value : `'${value.replaceAll("'", "''")}'`;
+
 editJson('package.json', (pkg) => {
   pkg.name = name;
   pkg.description = `${title}: AI-ready Playwright test automation`;
@@ -104,7 +108,7 @@ edit('allurerc.mjs', (text) =>
   text.replace(/(name|reportName): '[^']*'/g, (_, key) => `${key}: '${title}'`),
 );
 edit('.github/workflows/nightly.yml', (text) =>
-  text.replace(/report_name: .*/, `report_name: ${JSON.stringify(title)}`),
+  text.replace(/report_name: .*/, `report_name: ${yamlScalar(title)}`),
 );
 
 edit('README.md', (text) => text.replace(/^# .*/m, `# ${title}`));

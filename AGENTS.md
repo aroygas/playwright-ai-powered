@@ -4,22 +4,22 @@ TypeScript + Playwright framework for Web UI (E2E), API and Component testing. C
 
 ## Architecture map
 
-| Path                                                       | Contract                                                                                |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `config/environments.ts`, `config/env/*.env`               | Typed `env` (zod). Only source of URLs/creds/timeouts (`TEST_ENV`).                     |
-| `src/api/client/ApiClient.ts`                              | `APIRequestContext` wrapper: auth injection, typed `ApiResponse<T>`, logging.           |
-| `src/api/services/*Service.ts`                             | One thin class per domain. Returns responses, **never asserts**.                        |
-| `src/api/schemas/*.ts`                                     | zod schemas + `expectSchema()` for contract checks.                                     |
-| `src/ui/components/`                                       | Component Objects extending `BaseComponent(root: Locator)`.                             |
-| `src/ui/pages/`                                            | Page Objects extending `BasePage` (`path`, `goto()`, `isLoaded()`); compose components. |
-| `src/fixtures/`                                            | `base`, `ui`, `api`, `auth` fixtures merged in `index.ts`.                              |
-| `src/auth/`                                                | `roles.ts` (admin/user/guest), session reuse; `storage/` is gitignored.                 |
-| `src/data/factories/`                                      | faker builders with overrides + `CleanupRegistry`.                                      |
-| `src/utils/`                                               | `step` decorator, `tags.ts` (closed tag vocabulary).                                    |
-| `tests/e2e`, `tests/api`, `tests/component`, `tests/setup` | Specs per layer; `tests/seed.spec.ts` seeds the Test Agents.                            |
-| `playground/`                                              | React+Vite app mounted by Component Tests; explorable via `npm run playground:dev`.     |
-| `specs/`                                                   | Markdown test plans (planner agent).                                                    |
-| `.ai/prompts`, `.ai/templates`                             | Few-shot prompts and code templates.                                                    |
+| Path                                                       | Contract                                                                                  |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `config/environments.ts`, `config/env/*.env`               | Typed `env` (zod). Only source of URLs/creds/timeouts (`TEST_ENV`).                       |
+| `src/api/client/ApiClient.ts`                              | `APIRequestContext` wrapper: auth injection, typed `ApiResponse<T>`, logging.             |
+| `src/api/services/*Service.ts`                             | One thin class per domain. Returns responses, **never asserts**.                          |
+| `src/api/schemas/*.ts`                                     | zod schemas + `expectSchema()` for contract checks.                                       |
+| `src/ui/components/`                                       | Component Objects extending `BaseComponent(root: Locator)`.                               |
+| `src/ui/pages/`                                            | Page Objects extending `BasePage` (`path`, `goto()`, `isLoaded()`); compose components.   |
+| `src/fixtures/`                                            | `base`, `ui`, `api`, `auth` fixtures merged in `index.ts`.                                |
+| `src/auth/`                                                | `roles.ts` (admin/user/guest), session reuse; state is cached in the gitignored `.auth/`. |
+| `src/data/factories/`                                      | faker builders with overrides + `CleanupRegistry`.                                        |
+| `src/utils/`                                               | `step` decorator, `tags.ts` (closed tag vocabulary).                                      |
+| `tests/e2e`, `tests/api`, `tests/component`, `tests/setup` | Specs per layer; `tests/seed.spec.ts` seeds the Test Agents.                              |
+| `playground/`                                              | React+Vite app mounted by Component Tests; explorable via `npm run playground:dev`.       |
+| `specs/`                                                   | Markdown test plans (planner agent).                                                      |
+| `.ai/prompts`, `.ai/templates`                             | Few-shot prompts and code templates.                                                      |
 
 Path aliases: `@api/* @ui/* @fixtures @fixtures/* @data/* @auth/* @utils/* @config/* @playground/*`.
 

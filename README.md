@@ -52,7 +52,7 @@ npm run test:smoke         # @smoke on every browser project + API
 npm run test:ct         # component tests
 ```
 
-Requires Node ≥ 24 and npm ≥ 11 (see `.nvmrc`). If a run fails with "Executable doesn't exist", a browser is missing: run `npm run browsers:install` (on Linux it may need `sudo`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`).
+Requires Node ≥ 24 and npm ≥ 11 (see `.nvmrc`). If a run fails with "Executable doesn't exist", a browser is missing: run `npm run browsers:install` (on Linux it may need `sudo`). Credentials for the demo sites are public and committed in `config/env/*.env`; override anything via process env or a gitignored `.env` (see `.env.example`). The `github` MCP server in `.mcp.json` needs a read-only `GITHUB_MCP_TOKEN` in your environment, otherwise it fails to connect (see [`docs/MCP.md`](docs/MCP.md)).
 
 ## Commands
 
