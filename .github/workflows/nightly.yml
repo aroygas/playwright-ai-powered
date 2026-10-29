@@ -57,7 +57,7 @@ jobs:
         if: always()
         id: shard
         run: echo "name=${{ matrix.project }}-$(echo '${{ matrix.shard }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: blob-report-${{ steps.shard.outputs.name }}
@@ -75,7 +75,7 @@ jobs:
         env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-api.zip }
       - run: npm run test:ct
         env: { PLAYWRIGHT_BLOB_OUTPUT_NAME: report-ct.zip }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: blob-report-api-ct
