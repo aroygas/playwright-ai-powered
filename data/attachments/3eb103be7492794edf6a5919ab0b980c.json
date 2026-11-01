@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://restful-booker.herokuapp.com/booking",
+    "headers": {
+      "Accept": "application/json",
+      "Cookie": "***"
+    },
+    "body": {
+      "firstname": "Daphney",
+      "lastname": "Upton",
+      "totalprice": 355,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-11-19",
+        "checkout": "2026-11-22"
+      },
+      "additionalneeds": "Breakfast"
+    }
+  },
+  "response": {
+    "status": 200,
+    "durationMs": 47,
+    "headers": {
+      "content-length": "202",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sun, 01 Nov 2026 08:55:50 GMT",
+      "etag": "W/\"ca-IkyAWVyFdqsxeLTO+GIV/qlACVo\"",
+      "nel": "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failure_fraction\":0.1}",
+      "report-to": "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=v%2BN77DWYcShIrIUyCX0W8c19uIPluQ3pFWTWWRYgQ5I%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1793523350\"}],\"max_age\":3600}",
+      "reporting-endpoints": "heroku-nel=\"https://nel.heroku.com/reports?s=v%2BN77DWYcShIrIUyCX0W8c19uIPluQ3pFWTWWRYgQ5I%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1793523350\"",
+      "server": "Heroku",
+      "via": "1.1 heroku-router",
+      "x-powered-by": "Express"
+    },
+    "body": {
+      "bookingid": 2618,
+      "booking": {
+        "firstname": "Daphney",
+        "lastname": "Upton",
+        "totalprice": 355,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-11-19",
+          "checkout": "2026-11-22"
+        },
+        "additionalneeds": "Breakfast"
+      }
+    }
+  }
+}
