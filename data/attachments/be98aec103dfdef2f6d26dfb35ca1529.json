@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://restful-booker.herokuapp.com/booking",
+    "headers": {
+      "Accept": "application/json",
+      "Cookie": "***"
+    },
+    "body": {
+      "firstname": "Ocie",
+      "lastname": "Jacobson",
+      "totalprice": 338,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-11-14",
+        "checkout": "2026-11-14"
+      },
+      "additionalneeds": "Late checkout"
+    }
+  },
+  "response": {
+    "status": 200,
+    "durationMs": 182,
+    "headers": {
+      "content-length": "206",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Fri, 06 Nov 2026 09:05:17 GMT",
+      "etag": "W/\"ce-0qekPYIZeWFosrnkLBuM3DmqbWA\"",
+      "nel": "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failure_fraction\":0.1}",
+      "report-to": "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=DWp5jbGfX8Ovz14TBwtQGTiSnuu6c0CzUx2ugXBTsvg%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1793955917\"}],\"max_age\":3600}",
+      "reporting-endpoints": "heroku-nel=\"https://nel.heroku.com/reports?s=DWp5jbGfX8Ovz14TBwtQGTiSnuu6c0CzUx2ugXBTsvg%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1793955917\"",
+      "server": "Heroku",
+      "via": "1.1 heroku-router",
+      "x-powered-by": "Express"
+    },
+    "body": {
+      "bookingid": 2197,
+      "booking": {
+        "firstname": "Ocie",
+        "lastname": "Jacobson",
+        "totalprice": 338,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-11-14",
+          "checkout": "2026-11-14"
+        },
+        "additionalneeds": "Late checkout"
+      }
+    }
+  }
+}
