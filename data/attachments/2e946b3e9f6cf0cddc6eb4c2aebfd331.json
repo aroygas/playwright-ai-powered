@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://restful-booker.herokuapp.com/booking",
+    "headers": {
+      "Accept": "application/json",
+      "Cookie": "***"
+    },
+    "body": {
+      "firstname": "Leone",
+      "lastname": "Marquardt",
+      "totalprice": 385,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-12-11",
+        "checkout": "2026-12-15"
+      },
+      "additionalneeds": "Breakfast"
+    }
+  },
+  "response": {
+    "status": 200,
+    "durationMs": 69,
+    "headers": {
+      "content-length": "204",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 14 Nov 2026 08:46:21 GMT",
+      "etag": "W/\"cc-Up2i/EK14FHinejtqZEa45uAzR8\"",
+      "nel": "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failure_fraction\":0.1}",
+      "report-to": "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=fiLnMgqAzqPE3zcx8R0CKW55W955Lyy9lI9OL4kZq%2Bo%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1794645981\"}],\"max_age\":3600}",
+      "reporting-endpoints": "heroku-nel=\"https://nel.heroku.com/reports?s=fiLnMgqAzqPE3zcx8R0CKW55W955Lyy9lI9OL4kZq%2Bo%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1794645981\"",
+      "server": "Heroku",
+      "via": "1.1 heroku-router",
+      "x-powered-by": "Express"
+    },
+    "body": {
+      "bookingid": 2781,
+      "booking": {
+        "firstname": "Leone",
+        "lastname": "Marquardt",
+        "totalprice": 385,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-12-11",
+          "checkout": "2026-12-15"
+        },
+        "additionalneeds": "Breakfast"
+      }
+    }
+  }
+}
