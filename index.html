@@ -55,7 +55,7 @@
 
     
     <script>
-      window.allureReportOptions = {"id":"awesome","reportName":"Playwright AI-powered","logo":"","theme":"auto","reportLanguage":"en","createdAt":1794733237478,"reportUuid":"a659d117-9b24-4315-851c-3ad3da3d1e53","groupBy":[],"cacheKey":"1794733237478","ci":{"type":"github","detected":true,"repoName":"playwright-ai-powered","jobUid":"aroygas/playwright-ai-powered_Nightly regression","jobUrl":"https://github.com/aroygas/playwright-ai-powered/actions?query=workflow%3A%22Nightly%20regression%22","jobName":"aroygas/playwright-ai-powered - Nightly regression","pipelineRunName":"Nightly regression","pipelineRunUrl":"https://github.com/aroygas/playwright-ai-powered/actions/runs/43696925044","jobRunUid":"43696925044","jobRunUrl":"https://github.com/aroygas/playwright-ai-powered/actions/runs/43696925044","jobRunName":"report #23","jobRunBranch":"main","pullRequestUrl":"","pullRequestName":"","commitSha":"8a8f028a65b70a7ad4f69f53d3ce2bb339963168","provider":"github","repository":{"slug":"aroygas/playwright-ai-powered","url":"https://github.com/aroygas/playwright-ai-powered"},"sourceBranch":"main"},"git":{"commit":"8a8f028a65b70a7ad4f69f53d3ce2bb339963168","branch":"main"},"runSummary":{"start":1794733236251,"stop":1794733242014,"duration":5763},"runSummaryByEnv":{"default":{"start":1794733236251,"stop":1794733242014,"duration":5763}},"layout":"base","allureVersion":"3.22.1","sections":["charts","timeline"],"defaultSection":""}
+      window.allureReportOptions = {"id":"awesome","reportName":"Playwright AI-powered","logo":"","theme":"auto","reportLanguage":"en","createdAt":1794762815029,"reportUuid":"1dafbe17-3dbe-4f5e-975d-fa4f5118ea01","groupBy":[],"cacheKey":"1794762815029","ci":{"type":"github","detected":true,"repoName":"playwright-ai-powered","jobUid":"aroygas/playwright-ai-powered_Nightly regression","jobUrl":"https://github.com/aroygas/playwright-ai-powered/actions?query=workflow%3A%22Nightly%20regression%22","jobName":"aroygas/playwright-ai-powered - Nightly regression","pipelineRunName":"Nightly regression","pipelineRunUrl":"https://github.com/aroygas/playwright-ai-powered/actions/runs/43739718655","jobRunUid":"43739718655","jobRunUrl":"https://github.com/aroygas/playwright-ai-powered/actions/runs/43739718655","jobRunName":"report #24","jobRunBranch":"main","pullRequestUrl":"","pullRequestName":"","commitSha":"817ab8c7501268037257cdf31c77451903b79a14","provider":"github","repository":{"slug":"aroygas/playwright-ai-powered","url":"https://github.com/aroygas/playwright-ai-powered"},"sourceBranch":"main"},"git":{"commit":"817ab8c7501268037257cdf31c77451903b79a14","branch":"main"},"runSummary":{"start":1794762813736,"stop":1794762818230,"duration":4494},"runSummaryByEnv":{"default":{"start":1794762813736,"stop":1794762818230,"duration":4494}},"layout":"base","allureVersion":"3.33.0","sections":["charts","timeline"],"defaultSection":""}
     </script>
 </head>
 <body>
@@ -68,8 +68,9 @@
     <div id="app"></div>
     
     <script>
-      const { origin, pathname } = window.location; 
-      const url = new URL(pathname, origin);
+      const url = new URL(window.location.href);
+      url.search = "";
+      url.hash = "";
       const baseEl = document.createElement("base");
       
       baseEl.href = url.toString();
@@ -80,7 +81,7 @@
     <script>
       window.allure = window.allure || {};
     </script>
-    <script   src="app-1cf27b2f4f66161c2cd6.js"></script>
+    <script   src="app-189f0a86432a713a6a0d.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNDJ3J7WT0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -88,8 +89,8 @@
         gtag('js', new Date());
         gtag('config', 'G-LNDJ3J7WT0', {
           "report": "awesome",
-          "allureVersion": "3.22.1",
-          "reportUuid": "a659d117-9b24-4315-851c-3ad3da3d1e53",
+          "allureVersion": "3.33.0",
+          "reportUuid": "1dafbe17-3dbe-4f5e-975d-fa4f5118ea01",
           "single_file": "false"
         });
     </script>
