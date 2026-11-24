@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://restful-booker.herokuapp.com/booking",
+    "headers": {
+      "Accept": "application/json",
+      "Cookie": "***"
+    },
+    "body": {
+      "firstname": "Khalil",
+      "lastname": "Smith",
+      "totalprice": 835,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-12-04",
+        "checkout": "2026-12-13"
+      },
+      "additionalneeds": "Parking"
+    }
+  },
+  "response": {
+    "status": 200,
+    "durationMs": 262,
+    "headers": {
+      "content-length": "199",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Tue, 24 Nov 2026 12:12:51 GMT",
+      "etag": "W/\"c7-UcCckT07O6RkS9sVDhejUmstMoI\"",
+      "nel": "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failure_fraction\":0.1}",
+      "report-to": "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=2LeVcWmd%2BVRhID%2FRoRpGSIJ68uGTQtVvEQNDqnmmvUQ%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1795522371\"}],\"max_age\":3600}",
+      "reporting-endpoints": "heroku-nel=\"https://nel.heroku.com/reports?s=2LeVcWmd%2BVRhID%2FRoRpGSIJ68uGTQtVvEQNDqnmmvUQ%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1795522371\"",
+      "server": "Heroku",
+      "via": "1.1 heroku-router",
+      "x-powered-by": "Express"
+    },
+    "body": {
+      "bookingid": 1192,
+      "booking": {
+        "firstname": "Khalil",
+        "lastname": "Smith",
+        "totalprice": 835,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-12-04",
+          "checkout": "2026-12-13"
+        },
+        "additionalneeds": "Parking"
+      }
+    }
+  }
+}
